@@ -20,6 +20,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
@@ -163,19 +164,28 @@ public class PaperVersionCommand {
     }
 
     private CompletableFuture<ComputedVersion> fetchVersionMessage() {
-       return CompletableFuture.supplyAsync(() -> {
-           final Component message = Component.textOfChildren(
-               Component.text(Bukkit.getVersionMessage(), NamedTextColor.WHITE),
-               Component.newline(),
-               this.versionFetcher.getVersionMessage()
-           );
+        return CompletableFuture.supplyAsync(() -> {
+            final io.papermc.paper.ServerBuildInfo version = io.papermc.paper.ServerBuildInfo.buildInfo();
+            String miniMsg =
+                "<gradient:#F7B5F9:#ffffff>This server is running </gradient>"
+                    + "<gradient:#52C0FF:#AEE6FE><bold>Atri-MyDearServer</bold></gradient>"
+                    + "<gradient:#F7B5F9:#AEE6FE>, a modified version of Paper Server version "
+                    + version.asString(io.papermc.paper.ServerBuildInfo.StringRepresentation.VERSION_FULL)
+                    + " (Implementing API version " + Bukkit.getBukkitVersion() + ")</gradient>"
+                    + "\n<gradient:#AEE6FE:#F7B5F9><bold>Modified by YZ_Ljc_</bold></gradient>";
 
-           return new ComputedVersion(
-               message.hoverEvent(Component.translatable("chat.copy.click", NamedTextColor.WHITE))
-                   .clickEvent(ClickEvent.copyToClipboard(PlainTextComponentSerializer.plainText().serialize(message))),
-               System.currentTimeMillis()
-           );
-       });
+            Component miniMsgComponent = MiniMessage.miniMessage().deserialize(miniMsg);
+
+            final Component message = Component.textOfChildren(
+                miniMsgComponent
+            );
+
+            return new ComputedVersion(
+                message.hoverEvent(Component.translatable("chat.copy.click", NamedTextColor.WHITE))
+                    .clickEvent(ClickEvent.copyToClipboard(PlainTextComponentSerializer.plainText().serialize(message))),
+                System.currentTimeMillis()
+            );
+        });
     }
 
     record ComputedVersion(Component message, long computedTime) {

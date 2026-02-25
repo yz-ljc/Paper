@@ -123,7 +123,7 @@ public final class Bukkit {
     @NotNull
     public static String getVersionMessage() {
         final io.papermc.paper.ServerBuildInfo version = io.papermc.paper.ServerBuildInfo.buildInfo();
-        return "This server is running " + getName() + " version " + version.asString(io.papermc.paper.ServerBuildInfo.StringRepresentation.VERSION_FULL) + " (Implementing API version " + getBukkitVersion() + ")";
+        return getBukkitVersion();
         // Paper end
     }
 

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -255,17 +256,24 @@ public class VersionCommand extends BukkitCommand {
     // Paper start
     private void setVersionMessage(final @NotNull Component msg) {
         lastCheck = System.currentTimeMillis();
-        final Component message = Component.textOfChildren(
-            Component.text(Bukkit.getVersionMessage(), NamedTextColor.WHITE),
-            Component.newline(),
-            msg
-        );
+
+        final io.papermc.paper.ServerBuildInfo version = io.papermc.paper.ServerBuildInfo.buildInfo();
+        String miniMsg =
+            "<gradient:#F7B5F9:#FFFFFF>This server is running </gradient>"
+                + "<gradient:#52C0FF:#AEE6FE><bold>ATRI</bold></gradient>"
+                + "<gradient:#F7B5F9:#FFFFFF> CORE, a modified version of Paper Server version "
+                + version.asString(io.papermc.paper.ServerBuildInfo.StringRepresentation.VERSION_FULL)
+                + " (Implementing API version " + msg + ")</gradient>\n"
+                + "<gradient:#52C0FF:#F7B5F9>Modified by <bold>YZ_Ljc_</bold></gradient>";
+
+        Component message = MiniMessage.miniMessage().deserialize(miniMsg);
+
         this.versionMessage = Component.text()
             .append(message)
             .hoverEvent(Component.text("Click to copy to clipboard", NamedTextColor.WHITE))
             .clickEvent(ClickEvent.copyToClipboard(PlainTextComponentSerializer.plainText().serialize(message)))
             .build();
-        // Paper end
+
         versionLock.lock();
         try {
             hasVersion = true;

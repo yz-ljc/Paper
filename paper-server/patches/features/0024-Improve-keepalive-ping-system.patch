@@ -167,20 +167,20 @@ index 079ab378920c0e52ef4e42ef20b37bd389f40870..b8a4b4cc02a2fc6b70f4b840796eed50
 +            if (ka.challengeId() == packet.getId()) {
 +                itr.remove();
 +
-+                if (!this.processedDisconnect) {
-+                    LOGGER.info("Disconnecting {} for sending keepalive response ({}) out-of-order!", this.playerProfile().name(), packet.getId());
-+                    this.disconnectAsync(TIMEOUT_DISCONNECTION_MESSAGE, io.papermc.paper.connection.DisconnectionReason.TIMEOUT);
-+                    return;
-+                }
++                //if (!this.processedDisconnect) {
++                //    LOGGER.info("Disconnecting {} for sending keepalive response ({}) out-of-order!", this.playerProfile().name(), packet.getId());
++                //    this.disconnectAsync(TIMEOUT_DISCONNECTION_MESSAGE, io.papermc.paper.connection.DisconnectionReason.TIMEOUT);
++                //    return;
++                //}
 +                break;
 +            }
          }
 +
-+        if (!this.processedDisconnect) {
-+            LOGGER.info("Disconnecting {} for sending keepalive response ({}) without matching challenge!", this.playerProfile().name(), packet.getId());
-+            this.disconnectAsync(TIMEOUT_DISCONNECTION_MESSAGE, io.papermc.paper.connection.DisconnectionReason.TIMEOUT);
-+            return;
-+        }
++        //if (!this.processedDisconnect) {
++        //    LOGGER.info("Disconnecting {} for sending keepalive response ({}) without matching challenge!", this.playerProfile().name(), packet.getId());
++        //    this.disconnectAsync(TIMEOUT_DISCONNECTION_MESSAGE, io.papermc.paper.connection.DisconnectionReason.TIMEOUT);
++        //    return;
++        //}
 +        // Paper end - improve keepalives
      }
  
